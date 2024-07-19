@@ -1,11 +1,11 @@
 import { Router } from "express";
 import { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails } from "../controller/productController.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { verifyJWT  , authorizeRoles} from "../middleware/auth.middleware.js";
 
 const router = Router()
 
-router.route('/product').get( verifyJWT ,getAllProducts)
-router.route('/product/new').post(createProduct)
-router.route('/product/:id').put(updateProduct).delete(deleteProduct).get(getProductDetails)
+router.route('/product').get(getAllProducts)
+router.route('/product/new').post( verifyJWT , authorizeRoles("admin") ,createProduct)
+router.route('/product/:id').put( verifyJWT , authorizeRoles("admin") ,updateProduct).delete( verifyJWT ,authorizeRoles("admin") ,deleteProduct).get(getProductDetails)
 
 export default router

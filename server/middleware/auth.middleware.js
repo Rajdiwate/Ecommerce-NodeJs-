@@ -25,3 +25,15 @@ export const verifyJWT = async(req,res,next)=>{
         return new ApiError(error?.message || " Invalid Access Token" )
     }
 }
+
+export const authorizeRoles = (...roles)=>{
+    return (req,res,next)=>{
+        if(!roles.includes(req.user.role)){  //should run for req.user.role == "user"
+            // if req.user.role == "user"  then this if condition will be !false=>true
+            //but if role is admin,then roles.include("admin") =>  !true=> false (this will not enter the if block)
+
+            next(new ApiError(`Role ${req.user.role} is not allowed to access this resource` , 403))
+        }
+        next();
+    }
+}

@@ -6,6 +6,7 @@ import { ApiFeatures } from "../utils/apiFeatures.js"
 // Create Products --- ADMIN ROUTE
 const createProduct = async (req, res, next) => {
     try {
+        req.body.user = req.user._id
         const product = await Product.create(req.body)
         return res.status(201).json({
             success: true,
@@ -25,7 +26,6 @@ const getAllProducts = async (req, res, next) => {
         .search()
         .filter()
         .pagination(resultsPerPage) 
-        console.log(apiFeature)
         const products = await apiFeature.query;
         return res.status(200).json({
             success: true,
