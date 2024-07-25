@@ -1,13 +1,32 @@
 import { Router } from "express";
-import { loginUser, registerUser , logoutUser,refreshAccessToken, changePassword} from "../controller/userController.js";
-import { verifyJWT } from "../middleware/auth.middleware.js";
+import { loginUser, registerUser, logoutUser, refreshAccessToken, changePassword, forgotPassword, resetPassword, getCurrentUser, updateProfile, getAllUsers, getDetails , updateUserRole , deleteUser } from "../controller/userController.js";
+import { verifyJWT, authorizeRoles } from "../middleware/auth.middleware.js";
 
 const router = Router();
 
 router.route('/register').post(registerUser)
+
 router.route('/login').post(loginUser)
-router.route('/logout').get(verifyJWT ,logoutUser )
+
+router.route('/password/forgot').post(forgotPassword)
+
+router.route('/password/reset/:token').put(resetPassword)
+
+router.route('/logout').get(verifyJWT, logoutUser)
+
 router.route('/refreshToken').post(refreshAccessToken)
-router.route('/changePassword').post(verifyJWT ,changePassword)
+
+router.route('/password/update').put(verifyJWT, changePassword)
+
+router.route('/me').get(verifyJWT, getCurrentUser)
+
+router.route('/me/update').put(verifyJWT, updateProfile)
+
+router.route('/admin/users').get(verifyJWT, authorizeRoles("admin"), getAllUsers)
+
+router.route('/admin/user/:id')
+    .get(verifyJWT, authorizeRoles("admin"), getDetails)
+    .put(verifyJWT , authorizeRoles("admin") , updateUserRole)
+    .delete(verifyJWT , authorizeRoles("admin") , deleteUser)
 
 export default router

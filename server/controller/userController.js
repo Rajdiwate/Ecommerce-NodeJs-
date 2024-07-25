@@ -1,6 +1,8 @@
 import { User } from "../models/user.models.js"
 import { ApiError } from "../utils/apiError.js"
 import jwt from "jsonwebtoken"
+import sendEmail from "../utils/sendEmail.js"
+import crypto from "crypto"
 
 //generate Access and Refresh TOkens
 const generateTokens = async (userId) => {
@@ -22,6 +24,11 @@ const registerUser = async (req, res, next) => {
         const { name, email, password } = req.body
 
         if (!name || !email || !password) return next(new ApiError("Incomplete Details", 400))
+
+        const temp = await User.findOne({ email: email });
+        if (temp) {
+            return next(new ApiError("User with this email already Exists", 400))
+        }
 
         const user = await User.create({ name, email, password, avatar: { public_id: "sample Id", url: "sample url" } })
 
@@ -83,7 +90,7 @@ const loginUser = async (req, res, next) => {
     }
 }
 
-//Login
+//Logout
 const logoutUser = async (req, res, next) => {
     try {
         const userId = req.user._id;
@@ -138,13 +145,16 @@ const refreshAccessToken = async (req, res, next) => {
 
 }
 
+//change Password
 const changePassword = async (req, res, next) => {
     try {
-        const { oldPassword, newPassword } = req.body;
+        const { oldPassword, newPassword, confirmPassword } = req.body;
 
-        if (!oldPassword || !newPassword) {
-            return next(new ApiError("old and new password is required", 400))
+        if (!oldPassword || !newPassword || !confirmPassword) {
+            return next(new ApiError("old and new password and confirm Password  is required", 400))
         }
+
+        if (newPassword !== confirmPassword) return next(new ApiError("passwords dosent match", 400));
 
         const user = await User.findById(req.user._id)
         const isCorrectPassword = await user.isPasswordCorrect(oldPassword)
@@ -153,9 +163,168 @@ const changePassword = async (req, res, next) => {
         }
         user.password = newPassword;
         await user.save();
+
+        //login the user
+        const { AT, RT } = await generateTokens(user._id)
+        const options = {
+            maxAge: new Date(Date.now() + (process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000)),
+            httpOnly: true,
+            // secure: true
+        }
+
+        const userObject = user.toObject();
+        delete userObject.password;
+
+        return res.status(200).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, userObject })
+
+    } catch (error) {
+        return next(new ApiError(error.message, 500))
+    }
+}
+
+//forgot Password
+const forgotPassword = async (req, res, next) => {
+    try {
+        //get the user who wants to change the password
+        const user = await User.findOne({ email: req.body.email })
+        if (!user) {
+            return next(new ApiError("user not found", 404));
+        }
+
+        //get reset Password Token
+        const resetToken = await user.getResetPasswordToken();
+
+        await user.save({ validateBeforeSave: false });
+
+        const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`
+
+        const message = `Your Password Reset Token is :- \n\n ${resetPasswordUrl} \n\n If you have not requested this email then, please ignore it`
+
+        try {
+
+            await sendEmail({
+                email: user.email,
+                subject: `Ecommerce Password Recovery`,
+                message
+            })
+
+
+            res.status(200).json({ success: true, message: `Email sent to ${user.email} successfully` })
+        } catch (error) {
+            user.resetPasswordToken = undefined
+            user.resetPasswordExpiry = undefined
+            await user.save()
+            return next(new ApiError(error.message, 500))
+        }
+
+    } catch (error) {
+        next(new ApiError(error.message, 500));
+    }
+}
+
+//reset Pasword
+const resetPassword = async (req, res, next) => {
+    try {
+        //creating token hash
+        const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex")
+        //search user using hased token
+
+        const user = await User.findOne({
+            resetPasswordToken: resetPasswordToken,
+            resetPasswordExpiry: { $gt: Date.now() }
+        })
+        if (!user) {
+            return next(new ApiError("Reset Password Token is Invalid or has been Expired", 404))
+        }
+
+        if (req.body.password !== req.body.confirmPassword) {
+            return next(new ApiError("password dosent match", 400))
+        }
+        user.password = req.body.password
+        user.resetPasswordToken = undefined
+        user.resetPasswordExpiry = undefined
+        await user.save();
+
+        //login User
+        const { AT, RT } = await generateTokens(user._id)
+        const options = {
+            maxAge: new Date(Date.now() + (process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000)),
+            httpOnly: true,
+            // secure: true
+        }
+
+        const userObject = user.toObject();
+        delete userObject.password;
+
+        return res.status(200).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, userObject })
+
+
+    } catch (error) {
+        next(new ApiError(error.message, 500))
+    }
+}
+
+//get user details
+const getCurrentUser = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.user._id).select("-password -refreshToken")
         return res.status(200).json({
             success: true,
-            message: "Password Changed"
+            user
+        })
+    } catch (error) {
+        return next(new ApiError(error.message, 500))
+    }
+}
+
+//update user details
+const updateProfile = async (req, res, next) => {
+    try {
+        const { name, email } = req.body;
+
+        const updateFields = {};
+        if (name) updateFields.name = name;
+        if (email) updateFields.email = email;
+
+        const user = await User.findByIdAndUpdate(
+            req.user._id,
+            { $set: updateFields },
+            { runValidators: true, new: true }
+        ).select("-password -refreshToken");
+
+        return res.status(200).json({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        return next(new ApiError(error.message, 500));
+    }
+};
+
+//Get All Users (Admin)
+const getAllUsers = async (req, res, next) => {
+    try {
+        const users = await User.find();
+        res.status(200).json({ success: true, users });
+
+    } catch (error) {
+        return next(new ApiError(error.message, 500))
+    }
+}
+
+// Get Single User  (Admin)
+const getDetails = async (req, res, next) => {
+    try {
+        const id = req.params.id
+        const user = await User.findById(id).select("-password -refreshToken");
+        if (!user) {
+            return next(new ApiError("No user Found", 400))
+        }
+
+        return res.status(200).json({
+            success: true,
+            user,
         })
 
     } catch (error) {
@@ -163,4 +332,37 @@ const changePassword = async (req, res, next) => {
     }
 }
 
-export { registerUser, loginUser, logoutUser, refreshAccessToken, changePassword }
+//Update User Role (Admin)
+const updateUserRole = async (req, res, next) => {
+    try {
+        const userData = {
+            name: req.body.name,
+            email: req.body.email,
+            role: req.body.role
+        }
+
+        const user = await User.findByIdAndUpdate(req.params.id, userData, { new: true, runValidators: true })
+
+        return res.status(200).json({ success: true, user })
+
+    } catch (error) {
+        return next(new ApiError(error.message, 500))
+    }
+}
+
+// Delete User (Admin)
+const deleteUser = async (req, res, next) => {
+    try {
+
+        const user = await User.findByIdAndDelete(req.params.id)
+
+        //we will remove cloudinary
+
+        return res.status(200).json({ success: true })
+
+    } catch (error) {
+        return next(new ApiError(error.message, 500))
+    }
+}
+
+export { registerUser, loginUser, logoutUser, refreshAccessToken, changePassword, forgotPassword, resetPassword, getCurrentUser, updateProfile, getAllUsers, getDetails, updateUserRole, deleteUser }

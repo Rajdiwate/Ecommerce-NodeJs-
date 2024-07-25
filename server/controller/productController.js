@@ -1,4 +1,5 @@
 import { Product } from "../models/product.models.js"
+import { User } from "../models/user.models.js"
 import { ApiError } from "../utils/apiError.js"
 import { ApiFeatures } from "../utils/apiFeatures.js"
 
@@ -23,9 +24,9 @@ const getAllProducts = async (req, res, next) => {
         const resultsPerPage = 3;
         const productCount = await Product.countDocuments();
         const apiFeature = new ApiFeatures(Product.find(), req.query) //to search/filter a specific keyword
-        .search()
-        .filter()
-        .pagination(resultsPerPage) 
+            .search()
+            .filter()
+            .pagination(resultsPerPage)
         const products = await apiFeature.query;
         return res.status(200).json({
             success: true,
@@ -89,4 +90,55 @@ const deleteProduct = async (req, res, next) => {
     }
 }
 
-export { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails }
+//create a review or update a review
+const createReview = async (req, res, next) => {
+    try {
+        const { productId, ratings, comment } = req.body
+
+        const review = {
+            user: req.user._id,
+            name: req.user.name,
+            rating: Number(ratings),
+            comment
+        }
+
+        const product = await Product.findById(productId)
+        if (!product) {
+            return next(new ApiError("No product exists", 401))
+        }
+
+        //check if review is done already by this user
+        const isReviewed = product.reviews.find(rev => rev.user.toString() === req.user._id.toString())
+
+        if (isReviewed) 
+        {
+            product.reviews.forEach((rev) => {
+                if (rev.user.toString() === req.user._id.toString()) {
+                    rev.rating = Number(ratings)
+                    rev.comment = comment
+                }
+            })
+        }
+        else
+        {
+            product.reviews.push(review)
+            product.numOfReviews = product.reviews.length
+        }
+
+        //update ratings of product (avg of all ratings)
+        let avg = 0;
+        product.reviews.forEach(rev => {
+            avg += rev.rating;
+        });
+        product.ratings = avg / product.reviews.length;
+
+        await product.save({validateBeforeSave:false})
+
+        return res.status(200).json({ success: true, product })
+
+    } catch (error) {
+        return next(new ApiError(error.message, 500))
+    }
+}
+
+export { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails, createReview }

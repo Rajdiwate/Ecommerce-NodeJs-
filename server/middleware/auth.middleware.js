@@ -15,7 +15,7 @@ export const verifyJWT = async(req,res,next)=>{
         const user = await User.findById(decodedToken?._id).select('-refershToken')
 
         if(!user){
-            throw new ApiError(401 , "Invalid Access Token")
+            throw new ApiError(401 , "Access Token is Invalid or Expired")
         }
 
         req.user = user;
