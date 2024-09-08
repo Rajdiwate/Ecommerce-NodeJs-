@@ -121,7 +121,7 @@ const createReview = async (req, res, next) => {
         }
         else
         {
-            product.reviews.push(review)
+            product.reviews.push(review) //Push the newly created review into the array of reviews
             product.numOfReviews = product.reviews.length
         }
 

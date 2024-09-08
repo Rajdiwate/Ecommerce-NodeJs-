@@ -3,6 +3,10 @@ import { ApiError } from "../utils/apiError.js"
 import jwt from "jsonwebtoken"
 import sendEmail from "../utils/sendEmail.js"
 import crypto from "crypto"
+import { deleteCloudinary, uploadToCloudinary } from "../utils/Cloudinary.js"
+import fs from 'fs'
+
+
 
 //generate Access and Refresh TOkens
 const generateTokens = async (userId) => {
@@ -22,15 +26,38 @@ const generateTokens = async (userId) => {
 const registerUser = async (req, res, next) => {
     try {
         const { name, email, password } = req.body
-
+        var avatarLoacalPath = null;
+        if(req.files){
+            if(req.files.avatar){
+                avatarLoacalPath = req.files.avatar[0].path;
+            }
+        }
+        // console.log(avatarLoacalPath);
+        
         if (!name || !email || !password) return next(new ApiError("Incomplete Details", 400))
 
         const temp = await User.findOne({ email: email });
         if (temp) {
+            if(avatarLoacalPath) fs.unlinkSync(avatarLoacalPath)
             return next(new ApiError("User with this email already Exists", 400))
         }
 
-        const user = await User.create({ name, email, password, avatar: { public_id: "sample Id", url: "sample url" } })
+        // Upload to cloudinary if avatat exists
+        let user = null;
+        if (avatarLoacalPath) {
+            const avatarInstance = await uploadToCloudinary(avatarLoacalPath)
+            try {
+                user = await User.create({ name, email, password, avatar: { public_id: avatarInstance.public_id, url: avatarInstance.url } })
+            } catch (error) {
+                const avatarId = avatarInstance?.public_id
+                await deleteCloudinary(avatarId);
+                return next(new ApiError(error.message, 400));
+            }
+        }
+        else {
+            user = await User.create({ name, email, password }) // create user without avatar
+        }
+
 
         const createdUser = await User.findById(user._id).select("-password -refreshToken")
 
@@ -46,10 +73,10 @@ const registerUser = async (req, res, next) => {
             httpOnly: true,
             // secure: true
         }
-
         return res.status(201).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, createdUser })
 
     } catch (error) {
+        
         return next(new ApiError(error.message, 400))
     }
 }
@@ -281,10 +308,27 @@ const getCurrentUser = async (req, res, next) => {
 const updateProfile = async (req, res, next) => {
     try {
         const { name, email } = req.body;
-
+        let avatarLoacalPath = null
+        if(req.files){
+            if(req.files.avatar){
+                avatarLoacalPath = req.files.avatar[0].path;
+            }
+        }
         const updateFields = {};
         if (name) updateFields.name = name;
         if (email) updateFields.email = email;
+
+
+        if(avatarLoacalPath){
+            const oldUser =  await User.findById(req.user._id);
+            if(oldUser.avatar){
+                await deleteCloudinary(oldUser.avatar.public_id);
+            }
+
+            const uploadedAvatar = await uploadToCloudinary(avatarLoacalPath)
+            updateFields.avatar = {public_id : uploadedAvatar.public_id , url: uploadedAvatar.url}
+            
+        }
 
         const user = await User.findByIdAndUpdate(
             req.user._id,

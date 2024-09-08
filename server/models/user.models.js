@@ -28,11 +28,11 @@ const userSchema = new Schema({
     {
         public_id: {
             type: String,
-            required: true
+            required: function() { return this.avatar && this.avatar.public_id; }
         },
         url: {
             type: String,
-            required: true
+            required: function() { return this.avatar && this.avatar.url; } 
         }
     },
     role: {
@@ -40,11 +40,11 @@ const userSchema = new Schema({
         default: "user"
     },
     refreshToken: {
-        type :String,
+        type: String,
         // select: false,
     },
-    resetPasswordToken : String,
-    resetPasswordExpiry : Date
+    resetPasswordToken: String,
+    resetPasswordExpiry: Date
 
 }, { timestamps: true })
 
@@ -59,13 +59,13 @@ userSchema.methods.isPasswordCorrect = async function (password) {
     return await bcrypt.compare(password, this.password)
 }
 //Generatiing password reset token
-userSchema.methods.getResetPasswordToken = function(){
+userSchema.methods.getResetPasswordToken = function () {
     //Generating Token  
     const resetToken = crypto.randomBytes(20).toString("hex");
 
     //Hashing and adding to user schema
-    this.resetPasswordToken =crypto.createHash("sha256").update(resetToken).digest("hex")
-    this.resetPasswordExpiry = Date.now()+ 15*60*1000
+    this.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex")
+    this.resetPasswordExpiry = Date.now() + 15 * 60 * 1000
     return resetToken
 }
 userSchema.methods.generateAccessToken = function () {
@@ -73,7 +73,7 @@ userSchema.methods.generateAccessToken = function () {
         {
             _id: this._id,
             role: this.role,
-            name : this.name
+            name: this.name
         },
         process.env.ACCESS_TOKEN_SECRET,
         {
@@ -85,7 +85,7 @@ userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
         {
             _id: this._id,
-            name : this.name
+            name: this.name
         },
 
         process.env.REFRESH_TOKEN_SECRET,

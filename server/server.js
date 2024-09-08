@@ -10,9 +10,8 @@ process.on("uncaughtException" , (err)=>{
 })
 
 dotenv.config({
-    path: './server/.env'
+    path: 'server/.env'
 })
-
 
 
 dbConnect().then(()=>{
@@ -26,4 +25,10 @@ dbConnect().then(()=>{
 .catch((error)=>{
     console.log("DB connection failed")
     throw error
+})
+process.on("unhandledRejection" , err=>{
+    console.log(`Error : ${err.message}`)
+    console.log(`Shutting down the server due to unhandled Promise rejection`);
+    process.exit(1)
+    
 })
