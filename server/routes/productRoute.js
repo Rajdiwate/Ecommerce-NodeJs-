@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails , createReview } from "../controller/productController.js";
+import { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails , createReview, getProductReviews, deleteReview } from "../controller/productController.js";
 import { verifyJWT, authorizeRoles } from "../middleware/auth.middleware.js";
 
 const router = Router()
@@ -18,5 +18,6 @@ router
 router.route('/product/:id').get(getProductDetails)
 
 router.route('/review').put(verifyJWT , createReview)
+router.route('/reviews').get( getProductReviews).delete(verifyJWT , deleteReview)
 
 export default router

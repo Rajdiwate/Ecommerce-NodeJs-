@@ -386,6 +386,9 @@ const updateUserRole = async (req, res, next) => {
         }
 
         const user = await User.findByIdAndUpdate(req.params.id, userData, { new: true, runValidators: true })
+        if(!user){
+            return next(new ApiError("No Such user exists" , 400))
+        }
 
         return res.status(200).json({ success: true, user })
 
@@ -398,11 +401,15 @@ const updateUserRole = async (req, res, next) => {
 const deleteUser = async (req, res, next) => {
     try {
 
-        const user = await User.findByIdAndDelete(req.params.id)
+        const user = await User.findById(req.params.id)
+        if(!user){
+            return next(new ApiError("No user Exists" , 400))
+        }
 
-        //we will remove cloudinary
+        await deleteCloudinary(user.avatar?.public_id);
+        await User.deleteOne(req.params.id)
 
-        return res.status(200).json({ success: true })
+        return res.status(200).json({ success: true , message : "User deleted Successfully" })
 
     } catch (error) {
         return next(new ApiError(error.message, 500))

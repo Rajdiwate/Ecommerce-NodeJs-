@@ -141,4 +141,56 @@ const createReview = async (req, res, next) => {
     }
 }
 
-export { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails, createReview }
+// get all reviews of a product
+const getProductReviews = async(req,res,next)=>{
+    try {
+        
+        const product  = await Product.findById(req.query.id);
+        if(!product){
+            return next(new ApiError("No such product exists" , 404));
+        }
+
+        const allReviews = product.reviews;
+
+        return res.status(200).json({success:true , reviews: allReviews})
+
+
+
+    } catch (error) {
+        return next(new ApiError(error.message , 400))
+    }
+}
+
+const deleteReview = async(req,res,next)=>{
+    try {
+        const product = await Product.findById(req.query.productId)
+        if(!product){
+            return next(new ApiError("No such product exists" , 404))
+        }
+
+        //filter reviews that we dont want to delete
+        const reviews = product.reviews.filter(rev=>rev._id.toString() !== req.query.id.toString());
+        console.log(reviews);
+        
+        //calculate new ratings
+        let sum = 0;
+        let length = 0;
+        reviews.forEach((rev)=>{
+            sum+= rev.rating;
+            length+=1;
+        })
+
+        //update the product
+        product.ratings = length>0? sum/length : 0
+        product.numOfReviews = length
+        product.reviews = reviews;
+        await product.save({validateBeforeSave:false});
+
+        return res.status(200).json({success : true});  
+
+    } catch (error) {
+        return next(new ApiError(error.message , 400))
+    }
+}
+
+export { getAllProducts, createProduct, updateProduct, deleteProduct, getProductDetails, createReview , getProductReviews  ,deleteReview}
