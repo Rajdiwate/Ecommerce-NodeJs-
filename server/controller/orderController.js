@@ -2,6 +2,22 @@ import { Order } from "../models/orders.models.js";
 import { Product } from "../models/product.models.js"
 import { ApiError } from "../utils/apiError.js";
 
+
+async function updateStock(productId , quantity ){
+    try {
+        const product = await Product.findById(productId);
+        if(quantity >product.stock){
+            product.stock = 0;
+        }else{
+            product.stock-=quantity;
+        }
+        await product.save({validateBeforeSave:false})
+        return true
+    } catch (error) {
+        return false
+    }
+}
+
 // Create a new Order
 const createOrder = async (req, res, next) => {
     try {
@@ -66,10 +82,28 @@ const getAllOrders = async(req,res,next)=>{
 //update order Status -- Admin
 const updateOrderStatus = async(req,res,next)=>{
     try {
-        const order = await Order.findByIdAndUpdate(req.params.id , {$set:{orderStatus : req.body.orderStatus}});
+        const order = await Order.findById(req.params.id);
         if(!order){
             return next(new ApiError("No Order found" , 404));
         }
+
+        if(order.orderStatus == "Delivered"){
+            return next(new ApiError("Order already delivered"))
+        }
+
+        //update stock  only if the status is changed from processing->shipped (To be done later)
+        order.orderItems.forEach(async(order) => {
+            const isUpdated = await updateStock(order.product , order.quantity)
+            if(!isUpdated){
+                return next(new ApiError("product Updation failed" , 500))
+            }
+        })
+
+        order.orderStatus = req.body.status;
+
+        if(req.body.status === "Delivered") order.deliveredAt = Date.now();
+
+        await order.save({validateBeforeSave:false})
 
         return res.status(200).json({success : true , order})
 
@@ -78,5 +112,22 @@ const updateOrderStatus = async(req,res,next)=>{
     }
 }
 
+//Delete Order --Admin
+const deleteOrder = async(req,res,next)=>{
+    try {
+        
+        const order = await Order.findByIdAndDelete(req.params.id);
+        if(!order){
+            return next(new ApiError("no order found" , 404));
+        }
+        return res.status(200).json({success :true})
+        
 
-export { createOrder, getSingleOrder , myOrders , getAllOrders , updateOrderStatus}
+
+    } catch (error) {
+        return next(new ApiError(error.message , 400))
+    }
+}
+
+
+export { createOrder, getSingleOrder , myOrders , getAllOrders , updateOrderStatus , deleteOrder}
