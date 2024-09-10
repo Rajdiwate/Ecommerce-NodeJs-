@@ -18,9 +18,11 @@ app.use(cookieParser())
 //Routing
 import productRouter from './routes/productRoute.js'
 import userRouter from './routes/userRoutes.js'
+import orderRouter from  './routes/orderRoutes.js'
 
 app.use('/api/v1' , productRouter)
 app.use('/api/v1' , userRouter)
+app.use('/api/v1' , orderRouter)
 
 //Middleware for error
 app.use(errorMiddleware)

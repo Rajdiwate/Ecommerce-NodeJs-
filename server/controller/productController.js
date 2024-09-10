@@ -153,9 +153,6 @@ const getProductReviews = async(req,res,next)=>{
         const allReviews = product.reviews;
 
         return res.status(200).json({success:true , reviews: allReviews})
-
-
-
     } catch (error) {
         return next(new ApiError(error.message , 400))
     }
