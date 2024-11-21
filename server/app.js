@@ -1,12 +1,17 @@
 import express from 'express'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
+import dotenv from 'dotenv'
 import errorMiddleware from './middleware/error.js'
 
 export const app = express();
 
+dotenv.config({
+    path: 'server/.env'
+})
+
 app.use(cors({
-    origin : '*',
+    origin : process.env.CORS_ORIGIN,
     credentials : true
 }))
 
@@ -20,9 +25,9 @@ import productRouter from './routes/productRoute.js'
 import userRouter from './routes/userRoutes.js'
 import orderRouter from  './routes/orderRoutes.js'
 
-app.use('/api/v1' , productRouter)
-app.use('/api/v1' , userRouter)
-app.use('/api/v1' , orderRouter)
+app.use('/api' , productRouter)
+app.use('/api' , userRouter)
+app.use('/api' , orderRouter)
 
 //Middleware for error
 app.use(errorMiddleware)

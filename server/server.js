@@ -1,5 +1,5 @@
 import { app } from "./app.js";
-import dotenv from 'dotenv'
+
 import { dbConnect } from "./db/index.js";
 
 //handling uncaught exception
@@ -9,9 +9,7 @@ process.on("uncaughtException" , (err)=>{
     process.exit(1)
 })
 
-dotenv.config({
-    path: 'server/.env'
-})
+
 
 
 dbConnect().then(()=>{

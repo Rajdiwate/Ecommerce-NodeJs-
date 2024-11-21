@@ -8,3 +8,16 @@
   padding: 0;
   box-sizing: border-box;
 }
+
+.banner::after {
+  content: "";
+  width: 100vw;
+  height: 100vmin;
+  background-color: #ffffff;
+  position: absolute;
+  top: 0%;
+  left: 0;
+  bottom: 0;
+  clip-path: polygon(100% 70%, 0% 100%, 100% 100%);
+  max-width: 100%;
+}

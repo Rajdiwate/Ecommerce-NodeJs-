@@ -73,7 +73,7 @@ const registerUser = async (req, res, next) => {
             httpOnly: true,
             // secure: true
         }
-        return res.status(201).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, createdUser })
+        return res.status(201).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, user:createdUser })
 
     } catch (error) {
         

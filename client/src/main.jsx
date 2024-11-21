@@ -2,7 +2,11 @@ import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import Home from './components/layout/Home.jsx'
+import Home from './components/Home/Home.jsx'
+import Auth from './components/Auth/Auth.jsx'
+import { Provider } from 'react-redux'
+import { store } from './utils/redux/store.js'
+
 
 const router = createBrowserRouter([
   {
@@ -11,7 +15,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />
+        element: <Home/>
+      },
+      {
+        path : "auth",
+        element : <Auth/>
       }
     ]
   }
@@ -20,6 +28,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
 
+  <Provider store={store}>
   <RouterProvider router={router} />
+  </Provider>
 
 )
