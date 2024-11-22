@@ -1,6 +1,11 @@
 import { useState } from 'react'
+import { loginUser } from '../../api/user.api'
+import { useAuth } from '../../utils/customHooks/useAuth'
+import { useNavigate } from 'react-router-dom'
 
 export default function SignInForm() {
+  const {getCurrentUser , loading} = useAuth()
+  const navigate = useNavigate()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -14,11 +19,20 @@ export default function SignInForm() {
 
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault()
 
       // Handle form submission logic here
-      console.log('Sign In Form submitted', formData)
+      e.preventDefault()
+     const res = await loginUser(formData)
+     // user is successfully created
+     if(res.success){
+        getCurrentUser();
+        navigate('/')
+     }
+     else{
+      setError(res.message)
+     }
 
   }
 
