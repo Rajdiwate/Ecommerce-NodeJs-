@@ -2,8 +2,8 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { axiosInstance } from '../../axios'
 
 export const getUser = createAsyncThunk('authSlice/getUser', async (_, thunkApi) => {
-    const response = await axiosInstance.get('/me' , {withCredentials : true})
-    const user = response.data.user
+    const { data} = await axiosInstance.get('/me' )
+    const user = data.user
     return  {_id : user._id , name : user.name , email : user.email , avatar: user.avatar?.url , role : user.role }
 })
 

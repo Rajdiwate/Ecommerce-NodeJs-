@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import SignInForm from './SignInForm'
-import SignUpForm from './SignUpForm'
+import SignInForm from '../components/Auth/SignInForm'
+import SignUpForm from '../components/Auth/SignUpForm'
 
 
 export default function Auth() {

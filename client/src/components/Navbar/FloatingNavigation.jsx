@@ -2,8 +2,12 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const navItems = [
-    { name: 'Home', href: '/' },
-    { name: 'Products', href: '/products' },
+    {name : 'My Profile' , href : '/me' , admin: false , isAuthenticated : true},
+    { name: 'Home', href: '/',admin: false , isAuthenticated : false },
+    { name: 'Products', href: '/products' , admin: false , isAuthenticated : true},
+    {name : 'Cart' , href : '/cart' ,admin: false , isAuthenticated : true},
+    {name : 'Orders' , href : '/orders' ,admin: false , isAuthenticated : true},
+    
 ]
 
 const FloatingNavigation = React.memo(({isSidebarOpen , setIsSidebarOpen}) => {
