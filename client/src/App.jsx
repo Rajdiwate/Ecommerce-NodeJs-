@@ -8,7 +8,7 @@ import { useAuth } from './utils/customHooks/useAuth'
 
 
 const App = () => {
-  const {getCurrentUser , loading , user} =  useAuth()
+  const {getCurrentUser , loading } =  useAuth()
 
   useEffect(() => {
     webFont.load({
@@ -18,7 +18,6 @@ const App = () => {
     })
 
     getCurrentUser()
-    console.log(user)
   }, [])
 
   if(loading) return <>Loading...</>

@@ -6,9 +6,7 @@ import errorMiddleware from './middleware/error.js'
 
 export const app = express();
 
-dotenv.config({
-    path: 'server/.env'
-})
+dotenv.config()
 
 app.use(cors({
     origin : process.env.CORS_ORIGIN,

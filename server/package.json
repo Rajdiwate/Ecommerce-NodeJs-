@@ -20,8 +20,8 @@
   "main": "server/server.js",
   "scripts": {
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "start": "nodemon -r dotenv/config --experimental-json-modules server/server.js",
-    "dev": "nodemon -r dotenv/config server/server.js"
+    "start": "nodemon -r dotenv/config --experimental-json-modules server.js",
+    "dev": "nodemon -r dotenv/config server.js"
   },
   "author": "Raj Diwate",
   "license": "ISC",
