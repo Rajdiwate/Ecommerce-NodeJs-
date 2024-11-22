@@ -1,5 +1,19 @@
 import { axiosInstance } from "../utils/axios"
 
+export const loginUser=async({email,password})=>{
+
+    try{
+        const { data } = await axiosInstance.post('/login', {
+            email,
+            password
+          });
+          return data
+    }catch(error){
+        console.error("Login user error:", error.response?.data || error.message);
+    return error.response?.data || { error: "Login failed" };
+    }
+}
+
 
 export const registerUser = async({avatar ,name , email , password})=>{
     try {
