@@ -45,7 +45,7 @@ class ApiFeatures {
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, key => `$${key}`)  //converting gt=>$gt and so on for effective mongodb querying
 
 
-        this.query = this.query.find(JSON.parse(queryStr))  //example queryCopy =>   queryCopy = {category : "Laptop"}
+        this.query = this.query.find( JSON.parse(queryStr))  //example queryCopy =>   queryCopy = {category : "Laptop"}
         return this
     }
 
