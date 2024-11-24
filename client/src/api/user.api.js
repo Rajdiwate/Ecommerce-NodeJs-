@@ -16,9 +16,7 @@ export const loginUser = async ({ email, password }) => {
 
 export const forgotPassword=async({email})=>{
     try {
-        
         const {data}=await axiosInstance.post('/password/forgot',{email});
-        console.log(data)
         return data;
     } catch (error) {
         console.error("Forgot password error:", error.response?.data || error.message);
