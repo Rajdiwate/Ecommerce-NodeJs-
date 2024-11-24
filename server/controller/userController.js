@@ -213,7 +213,9 @@ const changePassword = async (req, res, next) => {
 const forgotPassword = async (req, res, next) => {
     try {
         //get the user who wants to change the password
+        console.log(req.body)
         const user = await User.findOne({ email: req.body.email })
+        
         if (!user) {
             return next(new ApiError("user not found", 404));
         }

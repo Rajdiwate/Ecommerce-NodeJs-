@@ -9,11 +9,16 @@
       "**/__tests__/**/*.test.js",
       "**/?(*.)+(spec|test).[jt]s?(x)"
     ],
-    "moduleFileExtensions": [ "mjs" , "js"],
-    "testPathIgnorePatterns": ["/node_modules/"],
-    "verbose" : true,
-    "forceExit" : true,
-    "clearMocks" : true
+    "moduleFileExtensions": [
+      "mjs",
+      "js"
+    ],
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ],
+    "verbose": true,
+    "forceExit": true,
+    "clearMocks": true
   },
   "version": "1.0.0",
   "description": "",
@@ -31,7 +36,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "express": "^4.19.2",
+    "express": "^4.21.1",
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.1",

@@ -6,7 +6,9 @@ import Home from './pages/Home.jsx'
 import Auth from './pages/Auth.jsx'
 import { Provider } from 'react-redux'
 import { store } from './utils/redux/store.js'
-
+import Products from './pages/Products.jsx'
+import Protected from './components/Auth/Protected.jsx'
+import ForgotPassword from './components/Auth/ForgotPassword.jsx'
 
 const router = createBrowserRouter([
   {
@@ -19,12 +21,16 @@ const router = createBrowserRouter([
       },
       {
         path : "auth",
-        element : <Auth/>
+        element : <Auth/>,
       },
-      // {
-      //   path:"forgotpassword",
-    
-      // }
+      {
+        path : "products",
+        element : <Products/>
+      },
+      {
+        path:"forgotpassword",
+        element:<ForgotPassword/>
+      }
     ]
   }
 ])

@@ -5,9 +5,9 @@ import {  getUser, logout } from '../redux/slices/authSlics'
 import {useNavigate} from 'react-router-dom'
 
 export const useAuth = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate()
   const dispatch = useDispatch()
-  const { user, loading, error } = useSelector(state=>state.user)
+  const { user, loading, error, isAuthenticated } = useSelector(state=>state.user)
 
   const getCurrentUser = useCallback(() => {
     if (!user._id) {
@@ -28,5 +28,5 @@ export const useAuth = () => {
   //   }
   // }, [user.email]);
 
-  return { user, loading, error, getCurrentUser, logoutCurentUser }
+  return { user, loading, error, getCurrentUser, logoutCurentUser , isAuthenticated }
 }

@@ -21,7 +21,7 @@ const createProduct = async (req, res, next) => {
 // Get All Products
 const getAllProducts = async (req, res, next) => {
     try {
-        const resultsPerPage = 3;
+        const resultsPerPage = 12;
         const productCount = await Product.countDocuments();
         const apiFeature = new ApiFeatures(Product.find(), req.query) //to search/filter a specific keyword
             .search()
