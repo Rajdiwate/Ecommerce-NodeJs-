@@ -23,7 +23,7 @@ export default function SignInForm() {
     e.preventDefault()
 
       // Handle form submission logic here
-      e.preventDefault()
+      e.preventDefault()  
      const res = await loginUser(formData)
      // user is successfully created
      if(res.success){
@@ -79,8 +79,11 @@ export default function SignInForm() {
           />
         </div>
       </div>
-
       <div>
+        <a href="http://localhost:5173/auth/forgotpassword" className='py-0 px-4 text-blue-600 relative mt-0 mb-0'>forgot password?</a>
+      </div>
+
+      <div> 
         <button
           type="submit"
           className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"

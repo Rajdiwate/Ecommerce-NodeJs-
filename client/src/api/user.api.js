@@ -6,10 +6,23 @@ export const loginUser = async ({ email, password }) => {
             email,
             password
         });
+        console.log(data);
         return data
     } catch (error) {
         console.error("Login user error:", error.response?.data || error.message);
         return error.response?.data || { error: "Login failed" };
+    }
+}
+
+export const forgotPassword=async({email})=>{
+    try {
+        
+        const {data}=await axiosInstance.post('/password/forgot',{email});
+        console.log(data)
+        return data;
+    } catch (error) {
+        console.error("Forgot password error:", error.response?.data || error.message);
+        return error.response?.data || { error: "Forgot password request failed" };
     }
 }
 
