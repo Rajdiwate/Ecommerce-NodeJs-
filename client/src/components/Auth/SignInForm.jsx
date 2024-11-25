@@ -80,7 +80,7 @@ export default function SignInForm() {
         </div>
       </div>
       <div>
-        <a href="http://localhost:5173/auth/forgotpassword" className='py-0 px-4 text-blue-600 relative mt-0 mb-0'>forgot password?</a>
+        <a href="http://localhost:5173/forgotpassword" className='py-0 px-4 text-blue-600 relative mt-0 mb-0'>forgot password?</a>
       </div>
 
       <div> 
