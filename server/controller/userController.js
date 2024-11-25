@@ -213,7 +213,6 @@ const changePassword = async (req, res, next) => {
 const forgotPassword = async (req, res, next) => {
     try {
         //get the user who wants to change the password
-        console.log(req.body)
         const user = await User.findOne({ email: req.body.email })
         
         if (!user) {
@@ -225,7 +224,7 @@ const forgotPassword = async (req, res, next) => {
 
         await user.save({ validateBeforeSave: false });
 
-        const resetPasswordUrl = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`
+        const resetPasswordUrl = `${req.get("Origin")}/password/reset/${resetToken}`
 
         const message = `Your Password Reset Token is :- \n\n ${resetPasswordUrl} \n\n If you have not requested this email then, please ignore it`
 
@@ -285,7 +284,7 @@ const resetPassword = async (req, res, next) => {
         const userObject = user.toObject();
         delete userObject.password;
 
-        return res.status(200).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, userObject })
+        return res.status(200).cookie("accessToken", AT, options).cookie("refreshToken", RT, options).json({ success: true, user : userObject })
 
 
     } catch (error) {

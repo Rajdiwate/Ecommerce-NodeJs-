@@ -9,6 +9,7 @@ import { store } from './utils/redux/store.js'
 import Products from './pages/Products.jsx'
 import Protected from './components/Auth/Protected.jsx'
 import ForgotPassword from './components/Auth/ForgotPassword.jsx'
+import ResetPassword from './pages/ResetPassword.jsx'
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         element : <Products/>
       },
     ]
+  },
+  {
+    path : '/password/reset/:token',
+    element : <ResetPassword/>
   }
 ])
 
