@@ -1,7 +1,8 @@
 import { Star, StarHalf } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 export default function ProductCard({ product }) {
-  const { name, ratings, numOfReviews, price } = product
+  const { _id ,name, ratings, numOfReviews, price } = product
   const image = product.images[0].url
 
   const renderStars = (rating) => {
@@ -26,7 +27,7 @@ export default function ProductCard({ product }) {
   }
 
   return (
-    <div className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col h-full">
+    <Link to={`/product/${_id}`} className="bg-gray-800 rounded-lg overflow-hidden shadow-lg transition-transform duration-300 hover:scale-105 flex flex-col h-full">
       <div className="relative h-64 w-full">
         <img
           src={image}
@@ -46,7 +47,7 @@ export default function ProductCard({ product }) {
         </div>
         <div className="text-2xl font-bold text-blue-400">₹{Number(price).toFixed(2)}</div>
       </div>
-    </div>
+    </Link>
   )
 }
 

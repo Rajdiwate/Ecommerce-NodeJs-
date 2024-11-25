@@ -15,10 +15,20 @@ export const getAllProducts = async function (args = {}) {
 
         // Send GET request with query parameters
         const { data } = await axiosInstance.get(`/product?${queryParams.toString()}`);
-
-        console.log("products", data.products);
         return data;
     } catch (error) {
         console.error("Get products error:", error.response?.data || error.message);
     }
 };
+
+
+export const getSingleProduct = async function(productId){
+    try {
+        const {data} = await axiosInstance.get(`/product/${productId}`)
+        console.log("product : " , data)
+        return data
+    } catch (error) {
+        console.log("Get single Product error:" , error.response.data)
+        return error.response.data
+    }
+}

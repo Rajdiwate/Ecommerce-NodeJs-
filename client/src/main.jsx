@@ -10,6 +10,7 @@ import Products from './pages/Products.jsx'
 import Protected from './components/Auth/Protected.jsx'
 import ForgotPassword from './components/Auth/ForgotPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
+import Product from './pages/Product.jsx'
 
 const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
         path : "products",
         element : <Products/>
       },
+      {
+        path: 'product/:productId',
+        element : <Product/>
+      }
     ]
   },
   {
