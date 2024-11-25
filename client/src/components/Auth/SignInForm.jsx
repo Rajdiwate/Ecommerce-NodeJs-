@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { loginUser } from '../../api/user.api'
 import { useAuth } from '../../utils/customHooks/useAuth'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function SignInForm() {
   const {getCurrentUser , loading} = useAuth()
@@ -80,7 +80,7 @@ export default function SignInForm() {
         </div>
       </div>
       <div>
-        <a href="http://localhost:5173/forgotpassword" className='py-0 px-4 text-blue-600 relative mt-0 mb-0'>forgot password?</a>
+        <Link to={'forgotpassword'} className='py-0  text-blue-600 relative mt-0 mb-0'>forgot password?</Link>
       </div>
 
       <div> 

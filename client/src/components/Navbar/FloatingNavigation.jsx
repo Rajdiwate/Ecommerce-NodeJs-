@@ -8,15 +8,17 @@ import { logout } from '../../utils/redux/slices/authSlics'
 
 const FloatingNavigation = React.memo(({ isSidebarOpen, setIsSidebarOpen }) => {
     const [activeItem, setActiveItem] = useState('')
-    const { isAuthenticated } = useAuth()
+    const { isAuthenticated ,user} = useAuth()
+    
     const dispatch = useDispatch()
 
     const navItems = [
-        { name: 'My Profile', href: '/me', admin: false, visible: isAuthenticated },
-        { name: 'Home', href: '/', admin: false, visible: true },
-        { name: 'Products', href: '/products', admin: false, visible: true },
-        { name: 'Cart', href: '/cart', admin: false, visible: isAuthenticated },
-        { name: 'Orders', href: '/orders', admin: false, visible: isAuthenticated }
+        { name: 'My Profile', href: '/me', visible: isAuthenticated },
+        { name: 'Dashboard', href: '/dashboard', visible: (isAuthenticated && user.role==='admin')},
+        { name: 'Home', href: '/', visible: true },
+        { name: 'Products', href: '/products', visible: true },
+        { name: 'Cart', href: '/cart', visible: isAuthenticated },
+        { name: 'Orders', href: '/orders', visible: isAuthenticated }
     ]
 
     const handleLogout = async function (e) {
