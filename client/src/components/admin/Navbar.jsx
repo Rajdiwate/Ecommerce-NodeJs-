@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../utils/customHooks/useAuth'
-import { logoutUser } from '../../api/user.api'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../utils/redux/slices/authSlics'
+import { useAuth } from '../../utils/customHooks/useAuth'
+import { logoutUser } from '../../api/user.api'
 
 
-const FloatingNavigation = React.memo(({ isSidebarOpen, setIsSidebarOpen }) => {
+const AdminNavbar = React.memo(({ isSidebarOpen, setIsSidebarOpen }) => {
     const [activeItem, setActiveItem] = useState('')
     const { isAuthenticated ,user} = useAuth()
     
@@ -98,4 +98,4 @@ const FloatingNavigation = React.memo(({ isSidebarOpen, setIsSidebarOpen }) => {
     )
 })
 
-export default FloatingNavigation
+export default AdminNavbar

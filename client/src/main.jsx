@@ -10,6 +10,8 @@ import Products from './pages/Products.jsx'
 import Protected from './components/Auth/Protected.jsx'
 import ForgotPassword from './components/Auth/ForgotPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
+import Dashboard from './components/admin/Dashboard.jsx'
+import Admin from './pages/Admin.jsx'
 
 const router = createBrowserRouter([
   {
@@ -42,7 +44,14 @@ const router = createBrowserRouter([
   {
     path : '/password/reset/:token',
     element : <ResetPassword/>
-  }
+  },{
+    path:"admin",
+    element:<Admin/>,
+    children:[{
+      path:"dashboard",
+      element:<Dashboard/>
+    }]
+  },
 ])
 
 
