@@ -1,7 +1,6 @@
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import SearchInput from './SearchInput'
 import FloatingNavigation from './FloatingNavigation'
 
 
@@ -11,7 +10,7 @@ export function Header() {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     return (
-        <nav className="fixed top-0 left-0 w-full z-50">
+        <nav className="fixed top-0 left-0 w-full h-16 z-50">
             <div className="flex items-center justify-between p-4 bg-gray-800 text-white">
                 <Link to="/" className="text-2xl font-bold">
                     EcoShop

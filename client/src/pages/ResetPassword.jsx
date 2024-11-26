@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { resetPassword } from "../api/user.api";
 import { useParams } from "react-router-dom";
+import Loading from "../components/Loading";
 
 export default function ResetPassword() {
   const {token} = useParams()
+  const [loading , setLoading]  = useState(false)
   const [formData, setFormData] = useState({
     newPassword: "",
     confirmPassword: "",
@@ -18,6 +20,7 @@ export default function ResetPassword() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     const res = await resetPassword({ token, password : formData.newPassword, confirmPassword : formData.confirmPassword });
     if (res.success) {
@@ -25,7 +28,11 @@ export default function ResetPassword() {
     } else {
       setError(res.message)
     }
+    setLoading(false)
+    
   };
+
+  if(loading) return <Loading/>
 
   if (resetSuccess) {
     return (

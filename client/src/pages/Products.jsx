@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import ProductCard from '../components/ProductCard/ProductCard'
 import { getAllProducts } from '../api/products.api'
+import Loading from '../components/Loading'
 
 
 const PRODUCTS_PER_PAGE = 12
@@ -30,10 +31,10 @@ export default function Products() {
     getProducts({page: currentPage}) 
   }
 
-  if(loading) return <>Loading...</>
+  if(loading) return <Loading/>
 
   return (
-    <div className=" bg-gray-900 py-12 pt-24 px-8 sm:px-12 lg:px-20 ">
+    <div className=" bg-gray-900 py-12  px-8 sm:px-12 lg:px-20 ">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-extrabold text-white mb-12 text-center">Our Products</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
