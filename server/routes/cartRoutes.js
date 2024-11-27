@@ -1,9 +1,13 @@
 import { Router } from "express";
-import { authorizeRoles, verifyJWT } from "../middleware/auth.middleware.js";
+import {  verifyJWT } from "../middleware/auth.middleware.js";
+import { addToCart, getCartDetails, removeItem, updateQuantity } from "../controller/cartController.js";
 
 const router = Router()
 
-router.route('/add-item/:id').post(verifyJWT)
+router.route('/add-item').post(verifyJWT , addToCart)
+router.route('/get-cart').get(verifyJWT , getCartDetails)
+router.route('/update-quantity').put(verifyJWT , updateQuantity)
+router.route('/remove-item').put(verifyJWT , removeItem)
 
 
 

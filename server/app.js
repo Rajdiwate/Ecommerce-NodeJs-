@@ -22,10 +22,12 @@ app.use(cookieParser())
 import productRouter from './routes/productRoute.js'
 import userRouter from './routes/userRoutes.js'
 import orderRouter from  './routes/orderRoutes.js'
+import cartRouter from './routes/cartRoutes.js'
 
 app.use('/api' , productRouter)
 app.use('/api' , userRouter)
 app.use('/api' , orderRouter)
+app.use('/api' , cartRouter)
 
 //Middleware for error
 app.use(errorMiddleware)
