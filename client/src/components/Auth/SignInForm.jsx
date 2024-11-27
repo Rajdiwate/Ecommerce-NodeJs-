@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { loginUser } from '../../api/user.api'
 import { useAuth } from '../../utils/customHooks/useAuth'
 import { Link, useNavigate } from 'react-router-dom'
+import Loading from '../Loading'
 
 export default function SignInForm() {
   const {getCurrentUser , loading} = useAuth()
@@ -35,6 +36,8 @@ export default function SignInForm() {
      }
 
   }
+
+  if(loading) return<Loading/>
 
   return (
     <form className="mt-8 space-y-6" onSubmit={handleSubmit} noValidate>

@@ -98,7 +98,7 @@ export default function Product() {
               </button>
             </div>
 
-            <AddToCart />
+            <AddToCart quantity={quantity}/>
             <AddReview />
           </div>
         </div>

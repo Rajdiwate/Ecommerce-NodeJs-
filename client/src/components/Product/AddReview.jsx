@@ -1,4 +1,3 @@
-import React from 'react'
 import { useAuth } from '../../utils/customHooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 

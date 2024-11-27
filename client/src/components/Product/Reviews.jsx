@@ -1,5 +1,4 @@
 import { Star, StarHalf } from "lucide-react";
-import React from "react";
 
 const Reviews = ({product}) => {
 

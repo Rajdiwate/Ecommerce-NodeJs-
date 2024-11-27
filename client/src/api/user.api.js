@@ -68,3 +68,14 @@ export const resetPassword = async ({token , password , confirmPassword}) => {
     }
 
 }
+
+export const getAllUsers = async function () {
+  try {
+      const { data } = await axiosInstance.get('/admin/users');
+      console.log(data);
+      return data;
+  } catch (error) {
+      console.error("Get users error:", error.response?.data || error.message);
+      throw error; 
+  }
+};

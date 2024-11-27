@@ -14,7 +14,7 @@ const FloatingNavigation = React.memo(({ isSidebarOpen, setIsSidebarOpen }) => {
 
     const navItems = [
         { name: 'My Profile', href: '/me', visible: isAuthenticated },
-        { name: 'Dashboard', href: '/dashboard', visible: (isAuthenticated && user.role==='admin')},
+        { name: 'Dashboard', href: '/admin/dashboard', visible: (isAuthenticated && user.role==='admin')},
         { name: 'Home', href: '/', visible: true },
         { name: 'Products', href: '/products', visible: true },
         { name: 'Cart', href: '/cart', visible: isAuthenticated },

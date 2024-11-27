@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import  { useEffect } from 'react'
 import webFont from 'webfontloader'
 import { Outlet } from 'react-router-dom'
 import { Header } from './components/Navbar/Header'
@@ -17,7 +17,7 @@ const App = () => {
     })
 
     getCurrentUser()
-  }, [])
+  }, [getCurrentUser])
 
   if(loading) return <Loading/>
 

@@ -15,6 +15,7 @@ export const getAllProducts = async function (args = {}) {
 
         // Send GET request with query parameters
         const { data } = await axiosInstance.get(`/product?${queryParams.toString()}`);
+        console.log(data)
         return data;
     } catch (error) {
         console.error("Get products error:", error.response?.data || error.message);

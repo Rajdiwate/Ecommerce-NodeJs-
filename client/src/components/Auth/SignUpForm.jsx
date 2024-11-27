@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { registerUser } from '../../api/user.api'
 import { useAuth } from '../../utils/customHooks/useAuth'
 import { useNavigate } from 'react-router-dom'
+import Loading from '../Loading'
 
 export default function SignUpForm() {
   const {getCurrentUser , loading} = useAuth()
@@ -40,6 +41,7 @@ export default function SignUpForm() {
      } 
   }
 
+  if(loading) return <Loading/>
   return (
     <form className="mt-5 space-y-6" onSubmit={handleSubmit} noValidate>
       {/* Consolidated Error Messages at Top */}
