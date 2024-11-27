@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 const ImageGallary = ({product}) => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -22,8 +22,8 @@ const ImageGallary = ({product}) => {
               <img
                 src={images[currentImageIndex]?.url}
                 alt={`${product?.name} - Image ${currentImageIndex + 1}`}
-                layout="fill"
-                objectFit="cover"
+                // layout="fill"
+                // objectFit="cover"
                 className="rounded-lg"
               />
             </div>

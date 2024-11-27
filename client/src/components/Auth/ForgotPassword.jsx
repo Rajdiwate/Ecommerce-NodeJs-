@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { forgotPassword } from "../../api/user.api";
 import { useNavigate } from "react-router-dom";
 import Loading from "../Loading";

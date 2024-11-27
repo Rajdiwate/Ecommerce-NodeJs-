@@ -3,7 +3,7 @@ import React from 'react'
 import {useAuth} from '../../utils/customHooks/useAuth'
 import { useNavigate } from 'react-router-dom'
 
-const AddToCart = () => {
+const AddToCart = React.memo(({quantity}) => {
 
   const {isAuthenticated} = useAuth()
   const navigate = useNavigate()
@@ -13,7 +13,8 @@ const AddToCart = () => {
       navigate('/auth')
     }
     else{
-      //add product to cart
+      //content
+
     }
 
   }
@@ -25,6 +26,6 @@ const AddToCart = () => {
      Add to Cart
    </button>
   )
-}
+})
 
 export default AddToCart
