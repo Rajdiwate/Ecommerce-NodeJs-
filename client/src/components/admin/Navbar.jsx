@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAuth } from '../../utils/customHooks/useAuth'
 
 export default function Sidebar() {
-    const [activeItem, setActiveItem] = useState('')
+    const [activeItem, setActiveItem] = useState('Dashboard')
 
     // const {isAuthenticated}=useAuth();
     const navItems = [

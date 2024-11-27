@@ -17,7 +17,7 @@ const AdminOrders = () => {
 
   useEffect(()=>{
     GetOrders()
-    setLoading(true);
+    setLoading(false);
   },[])
 
   const filteredOrders = orders.filter(order =>
@@ -108,7 +108,7 @@ const AdminOrders = () => {
         </div>
       </main>
 
-      {/* Right Sidebar */}
+      {/* Right Sidebar
       <aside className="fixed right-0 top-0 w-64 h-full bg-[#1E2330] p-6 overflow-y-auto">
         <h2 className="text-xl font-bold text-white mb-6">Sidebar</h2>
         <nav>
@@ -122,7 +122,7 @@ const AdminOrders = () => {
             ))}
           </ul>
         </nav>
-      </aside>
+      </aside> */}
     </div>
   );
 };

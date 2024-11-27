@@ -7,7 +7,7 @@ import Auth from './pages/Auth.jsx'
 import { Provider } from 'react-redux'
 import { store } from './utils/redux/store.js'
 import Products from './pages/Products.jsx'
-// import Protected from './components/Auth/Protected.jsx'
+import Protected from './components/Auth/Protected.jsx'
 import ForgotPassword from './components/Auth/ForgotPassword.jsx'
 import ResetPassword from './pages/ResetPassword.jsx'
 import Product from './pages/Product.jsx'
@@ -16,6 +16,7 @@ import Dashboard from './components/admin/Dashboard.jsx'
 import AdminOrders from './components/admin/Orders.jsx'
 import AdminProducts from './components/admin/Products.jsx'
 import AdminUsers from './components/admin/Users.jsx'
+import NotFound from './pages/NotFound.jsx'
 //import withRoleAuthorization from './components/Auth/Protected.jsx'
 
 // const AuthenticatedDashboard=withRoleAuthorization(Dashboard,["admin"]);
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
     element : <ResetPassword/>
   },{
     path:"admin",
-    element:<Admin/>,
+    element: <Protected><Admin/></Protected>,
     children:[
     {
       path:"dashboard",
@@ -80,6 +81,10 @@ const router = createBrowserRouter([
     // 
     ]
   },
+  {
+    path: "/not-found",
+    element : <NotFound/>
+  }
 ])
 
 

@@ -17,10 +17,10 @@ const AdminUsers = () => {
   }
 
   useEffect(() => {
-
     GetUsers()
     setLoading(false)
   }, [])
+
   if (loading) return <Loading />
 
   return (
