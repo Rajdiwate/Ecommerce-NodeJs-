@@ -1,5 +1,3 @@
-
-
 const featuredProducts = [
   { id: 1, name: 'Eco-Friendly Water Bottle', price: '$24.99', image: '/placeholder.svg?height=200&width=200' },
   { id: 2, name: 'Organic Cotton T-Shirt', price: '$29.99', image: '/placeholder.svg?height=200&width=200' },

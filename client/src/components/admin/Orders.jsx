@@ -4,7 +4,6 @@ import { getAllOrders } from '../../api/orders.api';
 import Loading from '../Loading';
 
 
-
 const AdminOrders = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [orders,setOrders]=useState([])
@@ -62,8 +61,8 @@ const AdminOrders = () => {
               </thead>
               <tbody>
                 {orders.map((order) => (
-                  <tr key={order.id} className="border-b border-gray-700 text-white">
-                    <td className="px-6 py-4">{order.id}</td>
+                  <tr key={order._id} className="border-b border-gray-700 text-white">
+                    <td className="px-6 py-4">{order._id}</td>
                     <td className="px-6 py-4">
                       <span className={`px-2 py-1 rounded-full text-xs ${
                         order.status === 'Completed' ? 'bg-green-500' :
@@ -77,12 +76,12 @@ const AdminOrders = () => {
                     </td>
                     <td className="px-6 py-4">{order.items}</td>
                     <td className="px-6 py-4">{order.quantity}</td>
-                    <td className="px-6 py-4">${order.amount.toFixed(2)}</td>
+                    <td className="px-6 py-4">₹{order.amount}</td>
                     <td className="px-6 py-4">
-                      <button className="text-[#2563EB] hover:text-blue-400 mr-2" aria-label={`Edit order ${order.id}`}>
+                      <button className="text-[#2563EB] hover:text-blue-400 mr-2" aria-label={`Edit order ${order._id}`}>
                         <Edit size={20} />
                       </button>
-                      <button className="text-red-500 hover:text-red-400" aria-label={`Delete order ${order.id}`}>
+                      <button className="text-red-500 hover:text-red-400" aria-label={`Delete order ${order._id}`}>
                         <Trash2 size={20} />
                       </button>
                     </td>

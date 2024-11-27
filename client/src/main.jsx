@@ -17,6 +17,7 @@ import AdminOrders from './components/admin/Orders.jsx'
 import AdminProducts from './components/admin/Products.jsx'
 import AdminUsers from './components/admin/Users.jsx'
 import NotFound from './pages/NotFound.jsx'
+import Authorize from './components/admin/Authorize.jsx'
 //import withRoleAuthorization from './components/Auth/Protected.jsx'
 
 // const AuthenticatedDashboard=withRoleAuthorization(Dashboard,["admin"]);
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
     element : <ResetPassword/>
   },{
     path:"admin",
-    element: <Protected><Admin/></Protected>,
+    element: <Protected><Authorize><Admin/></Authorize></Protected>,
     children:[
     {
       path:"dashboard",
