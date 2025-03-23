@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 export default function ProductCard({ product }) {
   const { _id ,name, ratings, numOfReviews, price } = product
-  const image = product.images[0].url
+  const image = product?.images.length >0 ? product?.images[0].url : ""
 
   const renderStars = (rating) => {
     const stars = []
