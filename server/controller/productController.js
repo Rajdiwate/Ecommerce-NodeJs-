@@ -7,6 +7,7 @@ import { ApiFeatures } from "../utils/apiFeatures.js"
 // Create Products --- ADMIN ROUTE
 const createProduct = async (req, res, next) => {
     try {
+        console.log("creating product")
         req.body.user = req.user._id
         const product = await Product.create(req.body)
         return res.status(201).json({
